@@ -1,5 +1,5 @@
 # FPSDataAnalyser (EN)
-[![中文](https://img.shields.io/badge/语言-中文-red.svg)](https://github.com/June12138/ShooterGameStatAnalyser/blob/main/README-CN.md)
+[![中文](https://img.shields.io/badge/语言-中文-red.svg)](https://github.com/June12138/ShooterGameStatAnalyser/blob/main/README.md)
 ## Introduction
 FPSDataAnalyser is a small tool for analyzing FPS game data, which can parse .xlsx files and generate charts of different weapons at different distances. (Currently only TTK charts, but it's easy to modify the code to generate other charts.)
 
