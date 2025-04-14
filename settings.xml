@@ -12,4 +12,5 @@
     <!-- fireRate: whatever unit you used to record weapon firerate, supports: s (fire interval in seconds), TODO: ms (fire interval in milliseconds), RPM (rounds per minute) -->
     <!-- fireRate: 记录武器射速的单位，支持: s (射击间隔，秒), ms (射击间隔，毫秒), RPM (每分钟射数) -->
     <units fireRate="s"/>
+    <graphSettings maxDistance="60" xAxis="distance" yAxis="TTK" hoverFields="STK,damage,fireInterval,fireRate,DPS"/>
 </data>

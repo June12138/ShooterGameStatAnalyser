@@ -14,6 +14,8 @@ fieldNames = settings.find("fieldNames")
 unitSettings = settings.find("units")
 # 加载武器表单
 gunWeapon = MyTable(sheetSettings.get("path"), sheetSettings.get("sheetName"), idField=fieldNames.get('idField'), skipRows=skipRows)
+# 加载绘制设置
+graphSettings = settings.find("graphSettings")
 
 def getIDByName(name):
     return int(gunWeapon[gunWeapon[fieldNames.get("name")] == name][gunWeapon.idField].item())
@@ -37,10 +39,11 @@ class WeaponData:
         for i in temp1:
             self.damageSeg.append(float(i))
         # 获取伤害距离分段
-        temp2 = self.weaponRecord[fieldNames.get("damageDistanceSegmentation")].item().split(sheetSettings.get('separator'))
+        temp2 = str(self.weaponRecord[fieldNames.get("damageDistanceSegmentation")].item()).split(sheetSettings.get('separator'))
         self.posSeg = [0]
         for i in temp2:
             self.posSeg.append(float(i))
+        self.posSeg.append(int(graphSettings.get("maxDistance")))
     def getDamage(self, distance, debug = False, ignoreBulletsPerShot = False):
         bulletsPerShot = 1
         if not ignoreBulletsPerShot: bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]
@@ -52,6 +55,10 @@ class WeaponData:
             if distance <= int(self.posSeg[i]):
                 return float(self.damageSeg[i]) * bulletsPerShot
         return 0
+    def getDPS(self, distance):
+        damage = self.getDamage(distance)
+        DPS = damage / self.fireInterval
+        return DPS
     def getSTK(self, distance, health = 100, debug = False):
         damage = self.getDamage(distance, debug = debug)
         STK = health//damage
@@ -65,13 +72,14 @@ class WeaponData:
         # 因为第一枪不用等, STK--
         return (STK - 1) * self.fireInterval
     def getKillData(self, health = 100):
-        data = pd.DataFrame(columns=['distance', 'STK', 'TTK', 'fireInterval', 'damage', 'fireRate'])
+        data = pd.DataFrame(columns=['distance', 'STK', 'TTK', 'fireInterval', 'damage', 'fireRate', 'DPS'])
         for i in range(0,len(self.posSeg)):
             data.loc[i] = {'distance': self.posSeg[i], 
                            'STK': round(self.getSTK(self.posSeg[i], health = health),2), 
                            'TTK': round(self.getTTK(self.posSeg[i], health = health),2), 
                            'fireInterval': round(self.fireInterval,2),
-                           'damage': str(self.getDamage(self.posSeg[i])) + " ({damage} * {bulletsPerShot})".format(damage = self.getDamage(self.posSeg[i]) / self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0] , bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]), 
-                           'fireRate': round(1/self.fireInterval*60, 0)
+                           'damage': str(self.getDamage(self.posSeg[i])) + " ({damage} * {bulletsPerShot})".format(damage = self.getDamage(self.posSeg[i], ignoreBulletsPerShot=True), bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]), 
+                           'fireRate': round(1/self.fireInterval*60, 0),
+                           'DPS': round(self.getDPS(self.posSeg[i]),2)
                         }
         return data
