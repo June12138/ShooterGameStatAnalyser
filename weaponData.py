@@ -10,6 +10,8 @@ for i in sheetSettings.get("skipRows").split(','):
     skipRows.append(int(i))
 # 加载表头名称相关设置
 fieldNames = settings.find("fieldNames")
+# 加载单位相关设置
+unitSettings = settings.find("units")
 # 加载武器表单
 gunWeapon = MyTable(sheetSettings.get("path"), sheetSettings.get("sheetName"), idField=fieldNames.get('idField'), skipRows=skipRows)
 
@@ -20,7 +22,14 @@ class WeaponData:
         self.id = id
         self.weaponRecord = gunWeapon.getRowByID(id)
         self.name = self.weaponRecord[fieldNames.get("name")].item()
-        self.fireInterval = self.weaponRecord[fieldNames.get("fireInterval")].iloc[0]
+        #根据射速记录模式设置fireInterval
+        fireRateMode = unitSettings.get("fireRate")
+        if fireRateMode == "s":
+            self.fireInterval = self.weaponRecord[fieldNames.get("fireRate")].iloc[0]
+        elif fireRateMode == "ms":
+            self.fireInterval = self.weaponRecord[fieldNames.get("fireRate")].iloc[0] / 1000
+        elif fireRateMode == "RPM":
+            self.fireInterval = 60 / self.weaponRecord[fieldNames.get("fireRate")].iloc[0]
         # 获取伤害分段
         self.damageSeg = []
         temp1 = self.weaponRecord[fieldNames.get("damageSegmentation")].item().split(sheetSettings.get('separator'))
@@ -59,9 +68,9 @@ class WeaponData:
         data = pd.DataFrame(columns=['distance', 'STK', 'TTK', 'fireInterval', 'damage', 'fireRate'])
         for i in range(0,len(self.posSeg)):
             data.loc[i] = {'distance': self.posSeg[i], 
-                           'STK': self.getSTK(self.posSeg[i], health = health), 
-                           'TTK': self.getTTK(self.posSeg[i], health = health), 
-                           'fireInterval': self.fireInterval,
+                           'STK': round(self.getSTK(self.posSeg[i], health = health),2), 
+                           'TTK': round(self.getTTK(self.posSeg[i], health = health),2), 
+                           'fireInterval': round(self.fireInterval,2),
                            'damage': str(self.getDamage(self.posSeg[i])) + " ({damage} * {bulletsPerShot})".format(damage = self.getDamage(self.posSeg[i]) / self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0] , bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]), 
                            'fireRate': round(1/self.fireInterval*60, 0)
                         }
