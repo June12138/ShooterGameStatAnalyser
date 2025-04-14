@@ -29,7 +29,7 @@ jupyter notebook
   - **damageDistanceSegmentation**为伤害衰减分隔距离的字段名称；
   - **damageSegmentation**为在不同距离上的实际伤害的字段名称（以后会支持按伤害倍率计算伤害衰减的模式）；
   - **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
-  - **fireInterval**为每次射击的间隔的字段名称。（单位为秒，以后也会支持微秒和RPM等射速单位）
+  - **fireRate**为每次射击的间隔的字段名称。（单位为秒，以后也会支持微秒和RPM等射速单位）
 - general标签中，
   - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值模式详见plotly官网；
   - **health**为预设的血量。
