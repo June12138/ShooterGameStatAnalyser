@@ -1,16 +1,10 @@
 <?xml version="1.0"?>
 <data>
-    <!-- skipRows: this should include all the header rows apart from the field identifier. Starts with 0, separate with comma -->
-    <!-- skipRows: 用来来跳过所有注释性质的表头，从0开始，逗号分割 -->
-    <!-- separators: whatever you used to separate arries in your sheets-->
-    <!-- separators: 表格中用于分隔数组的分隔符-->
+    <!-- Please refer to README-EN for specifics -->
+    <!-- 具体设置请参考README.md -->
     <sheet path="tables/Weapons.xlsx" sheetName="Guns" skipRows="0" separator=","/>
     <fieldNames idField="ID" name='Name' damageDistanceSegmentation="DamageDisSeg" damageSegmentation="DamageSeg" bulletsPerShot="BulletsPerShot" fireRate="FireInterval"/>
-    <!-- interpolation: types of interpolation methods: hv, vh, hvh, vhv, spline, linear, see https://plotly.com/python/line-charts/ for details -->
-    <!-- interpolation: 不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/ -->
     <general interpolation="vh" health="100"/>
-    <!-- fireRate: whatever unit you used to record weapon firerate, supports: s (fire interval in seconds), TODO: ms (fire interval in milliseconds), RPM (rounds per minute) -->
-    <!-- fireRate: 记录武器射速的单位，支持: s (射击间隔，秒), ms (射击间隔，毫秒), RPM (每分钟射数) -->
     <units fireRate="s"/>
     <graphSettings maxDistance="60" xAxis="distance" yAxis="TTK" hoverFields="STK,damage,fireInterval,fireRate,DPS"/>
 </data>

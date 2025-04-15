@@ -1,9 +1,9 @@
 # FPS数据解析器 (CN)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/June12138/ShooterGameStatAnalyser/blob/main/README-EN.md)
 ## 介绍
-FPSDataAnalyser是一个用于分析FPS游戏数据的小工具，可以解析.xlsx文件，并生成不同武器在不同距离上的图表。（目前只有TTK图表，其实小改一下代码就能生成别的）。
+FPSDataAnalyser是一个用于分析FPS游戏数据的小工具，可以解析.xlsx文件，并生成不同武器在不同距离上的图表。（例如TTK/距离，伤害/距离，STK/距离等）
 
-鼠标悬浮在图表上可以查看具体数值，STK、伤害、射速那些的，方便比较。
+鼠标悬浮在图表上可以查看具体数值，STK、伤害、射速、DPS那些的，方便比较。
 ![alt text](screenshot.png)
 ## 使用方法
 1. 下载到本地
@@ -31,7 +31,14 @@ jupyter notebook
   - **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
   - **fireRate**为每次射击的间隔的字段名称。（单位为秒，以后也会支持微秒和RPM等射速单位）
 - general标签中，
-  - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值模式详见plotly官网；
+  - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/；
   - **health**为预设的血量。
+- units标签中，
+  - fireRate为射速的单位，支持s、ms（作为每次射击之间的时间间隔）和RPM（射击次数每分钟）；
+- graphSettings标签中，
+  - maxDistance为图表中显示的最大距离；
+  - xAxis为x轴上绘制的属性（一般都是距离）；
+  - yAxis为y轴上绘制的属性（TTK、DPS、STK等）；
+  - hoverFields为鼠标悬浮窗口的显示的字段（X/Y轴上的数据会自动显示，此外还支持STK、伤害、射击间隔、RPM、DPS）。
 
-具体可以看一眼tables/Weapons.xlsx作为参考
+具体可以看一眼tables/Weapons.xlsx，和settings.xml对照作为参考
