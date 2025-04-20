@@ -4,4 +4,4 @@ from weaponData import *
 import xml.etree.ElementTree as et
 
 M4 = WeaponData(0)
-print(M4.damageSeg)
+print(M4.baseDamage)

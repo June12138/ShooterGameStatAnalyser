@@ -27,10 +27,13 @@ class WeaponData:
         #根据射速记录模式设置fireInterval
         fireRateMode = unitSettings.get("fireRate")
         if fireRateMode == "s":
+            # 秒间隔模式
             self.fireInterval = self.weaponRecord[fieldNames.get("fireRate")].iloc[0]
         elif fireRateMode == "ms":
+            # 毫秒间隔模式
             self.fireInterval = self.weaponRecord[fieldNames.get("fireRate")].iloc[0] / 1000
         elif fireRateMode == "RPM":
+            # RPM模式
             self.fireInterval = 60 / self.weaponRecord[fieldNames.get("fireRate")].iloc[0]
         # 获取伤害分段
         self.damageSeg = []
@@ -44,17 +47,32 @@ class WeaponData:
         for i in temp2:
             self.posSeg.append(float(i))
         self.posSeg.append(int(graphSettings.get("maxDistance")))
+        # 获取基础伤害
+        self.baseDamage = 0
+        try:
+            self.baseDamage = self.weaponRecord[fieldNames.get("baseDamage")].iloc[0]
+        except:
+            self.baseDamage = self.getDamage(0)
     def getDamage(self, distance, debug = False, ignoreBulletsPerShot = False):
+        # 获取子弹数量
         bulletsPerShot = 1
+        # 如果不忽略子弹数量，则获取子弹数量
         if not ignoreBulletsPerShot: bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]
         # 打印debug信息
         if debug:
             print(self.damageSeg)
             print(self.posSeg)
+        # 遍历距离段
+        damage = 0
         for i in range(0, len(self.posSeg)):
+            # 如果距离小于等于当前距离段，则返回对应的伤害值
             if distance <= int(self.posSeg[i]):
-                return float(self.damageSeg[i]) * bulletsPerShot
-        return 0
+                if (unitSettings.get("damageSegmentationMode") == "actual"):
+                    damage = float(self.damageSeg[i]) * bulletsPerShot
+                elif (unitSettings.get("damageSegmentationMode") == "multiplier"):
+                    damage = self.baseDamage * float(self.damageSeg[i]) * bulletsPerShot
+                break
+        return round(damage, 1)
     def getDPS(self, distance):
         damage = self.getDamage(distance)
         DPS = damage / self.fireInterval

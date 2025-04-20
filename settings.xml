@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <data>
-    <!-- Please refer to README-EN for specifics -->
+    <!-- Please refer to README-EN.md for specifics -->
     <!-- 具体设置请参考README.md -->
-    <sheet path="tables/Weapons.xlsx" sheetName="Guns" skipRows="0" separator=","/>
-    <fieldNames idField="ID" name='Name' damageDistanceSegmentation="DamageDisSeg" damageSegmentation="DamageSeg" bulletsPerShot="BulletsPerShot" fireRate="FireInterval"/>
+    <sheet path="tables/Weapons.xlsx" sheetName="GunsDelta" skipRows="0" separator=","/>
+    <fieldNames idField="ID" name='Name' damageDistanceSegmentation="DamageDisSeg" damageSegmentation="DamageSeg" bulletsPerShot="BulletsPerShot" fireRate="FireInterval" baseDamage="BaseDamage"/>
     <general interpolation="vh" health="100"/>
-    <units fireRate="s"/>
+    <units fireRate="s" damageSegmentationMode = "multiplier"/>
     <graphSettings maxDistance="60" xAxis="distance" yAxis="TTK" hoverFields="STK,damage,fireInterval,fireRate,DPS"/>
 </data>
