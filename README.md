@@ -17,28 +17,30 @@ jupyter notebook
 
 ## 设置说明
 - 所有设置都在settings.xml中
-- sheet标签中，
-  - **path**为.xlsx文件路径；
-  - **sheetName**为工作表名称；
-  - **idField**为id主键字段名称；
-  - **skipRows**为程序需要忽略掉的行数（从零开始，比如你的表格中第一行是中文注释，第二行是实际表头，就填0把第一行跳过）；
-  - **separator**为表格中用来分隔数组的符号（比如你的表格中，伤害距离和伤害值是用空格分隔的，就填空格）。
-- fieldNames标签中，
-  - **idField**为id字段名称；
-  - **name**为武器名称的字段名称；
-  - **damageDistanceSegmentation**为伤害衰减分隔距离的字段名称；
-  - **damageSegmentation**为在不同距离上的实际伤害的字段名称（以后会支持按伤害倍率计算伤害衰减的模式）；
-  - **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
-  - **fireRate**为每次射击的间隔的字段名称。（单位为秒，以后也会支持微秒和RPM等射速单位）
-- general标签中，
-  - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/；
-  - **health**为预设的血量。
-- units标签中，
-  - fireRate为射速的单位，支持s、ms（作为每次射击之间的时间间隔）和RPM（射击次数每分钟）；
-- graphSettings标签中，
-  - maxDistance为图表中显示的最大距离；
-  - xAxis为x轴上绘制的属性（一般都是距离）；
-  - yAxis为y轴上绘制的属性（TTK、DPS、STK等）；
-  - hoverFields为鼠标悬浮窗口的显示的字段（X/Y轴上的数据会自动显示，此外还支持STK、伤害、射击间隔、RPM、DPS）。
+### sheet标签sheet标签中：
+- **path**为.xlsx文件路径；
+- **sheetName**为工作表名称；
+- **idField**为id主键字段名称；
+- **skipRows**为程序需要忽略掉的行数（从零开始，比如你的表格中第一行是中文注释，第二行是实际表头，就填0把第一行跳过）；
+- **separator**为表格中用来分隔数组的符号（比如你的表格中，伤害距离和伤害值是用空格分隔的，就填空格）。
+### fieldNames标签中，
+- **idField**为id字段名称；
+- **name**为武器名称的字段名称；
+- **damageDistanceSegmentation**为伤害衰减分隔距离的字段名称；
+- **damageSegmentation**为在不同距离上的实际伤害的字段名称（以后会支持按伤害倍率计算伤害衰减的模式）；
+- **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
+- **fireRate**为每次射击的间隔的字段名称。s为每次射击的秒间隔，ms为每次射击的毫秒间隔，RPM为每分钟射击次数；
+- **baseDamage**为基础伤害的字段名称，可选填。如果伤害衰减是以伤害倍率计算的，则必填。
+### general标签中：
+- **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/；
+- **health**为预设的血量。
+### units标签中：
+- **fireRate**为射速的单位，支持s、ms（作为每次射击之间的时间间隔）和RPM（射击次数每分钟）；
+- **damageSegmentationMode**为伤害衰减模式，支持actual（实际伤害）和multiplier（伤害倍率）。
+### graphSettings标签中：
+- **maxDistance**为图表中显示的最大距离；
+- **xAxis**为x轴上绘制的属性（一般都是距离）；
+- **yAxis**为y轴上绘制的属性（TTK、DPS、STK等）；
+- **hoverFields**为鼠标悬浮窗口的显示的字段（X/Y轴上的数据会自动显示，此外还支持STK、伤害、射击间隔、RPM、DPS）。
 
 具体可以看一眼tables/Weapons.xlsx，和settings.xml对照作为参考
