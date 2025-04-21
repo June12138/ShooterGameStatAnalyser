@@ -24,6 +24,8 @@ class WeaponData:
         self.id = id
         self.weaponRecord = gunWeapon.getRowByID(id)
         self.name = self.weaponRecord[fieldNames.get("name")].item()
+        # 获取每发攻击子弹数量
+        self.bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]
         #根据射速记录模式设置fireInterval
         fireRateMode = unitSettings.get("fireRate")
         if fireRateMode == "s":
@@ -37,27 +39,36 @@ class WeaponData:
             self.fireInterval = 60 / self.weaponRecord[fieldNames.get("fireRate")].iloc[0]
         # 获取伤害分段
         self.damageSeg = []
-        temp1 = self.weaponRecord[fieldNames.get("damageSegmentation")].item().split(sheetSettings.get('separator'))
+        temp1 = str(self.weaponRecord[fieldNames.get("damageSegmentation")].item()).split(sheetSettings.get('separator'))
         self.damageSeg.append(float(temp1[0]))
         for i in temp1:
-            self.damageSeg.append(float(i))
+            if (i != 'nan'): self.damageSeg.append(float(i))
         # 获取伤害距离分段
-        temp2 = str(self.weaponRecord[fieldNames.get("damageDistanceSegmentation")].item()).split(sheetSettings.get('separator'))
+        temp2 = []
+        # 为了让damageDistanceSegmentation成为可以选填，做个保护
+        try:
+            temp2 = str(self.weaponRecord[fieldNames.get("damageDistanceSegmentation")].item()).split(sheetSettings.get('separator'))
+        except:
+            pass
         self.posSeg = [0]
-        for i in temp2:
-            self.posSeg.append(float(i))
+        if (temp2):
+            for i in temp2:
+                if (i != 'nan'): self.posSeg.append(float(i))
         self.posSeg.append(int(graphSettings.get("maxDistance")))
         # 获取基础伤害
         self.baseDamage = 0
+            # 因为基础伤害是选填项，做个保护
         try:
+            # 表里找得到就用表里的
             self.baseDamage = self.weaponRecord[fieldNames.get("baseDamage")].iloc[0]
         except:
-            self.baseDamage = self.getDamage(0)
+            # 否则直接用零距离上的伤害
+            self.baseDamage = self.getDamage(0, ignoreBulletsPerShot= True)
     def getDamage(self, distance, debug = False, ignoreBulletsPerShot = False):
         # 获取子弹数量
         bulletsPerShot = 1
         # 如果不忽略子弹数量，则获取子弹数量
-        if not ignoreBulletsPerShot: bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]
+        if not ignoreBulletsPerShot: bulletsPerShot = self.bulletsPerShot
         # 打印debug信息
         if debug:
             print(self.damageSeg)
@@ -67,8 +78,10 @@ class WeaponData:
         for i in range(0, len(self.posSeg)):
             # 如果距离小于等于当前距离段，则返回对应的伤害值
             if distance <= int(self.posSeg[i]):
+                # 如果伤害衰减是按实际伤害记录，则直接返回伤害值乘以子弹数量
                 if (unitSettings.get("damageSegmentationMode") == "actual"):
                     damage = float(self.damageSeg[i]) * bulletsPerShot
+                # 如果伤害衰减是按乘数记录，则返回基础伤害乘以伤害衰减乘以子弹数量
                 elif (unitSettings.get("damageSegmentationMode") == "multiplier"):
                     damage = self.baseDamage * float(self.damageSeg[i]) * bulletsPerShot
                 break
@@ -90,14 +103,15 @@ class WeaponData:
         # 因为第一枪不用等, STK--
         return (STK - 1) * self.fireInterval
     def getKillData(self, health = 100):
-        data = pd.DataFrame(columns=['distance', 'STK', 'TTK', 'fireInterval', 'damage', 'fireRate', 'DPS'])
+        data = pd.DataFrame(columns=['distance', 'STK', 'TTK', 'fireInterval', 'damage', 'fireRate', 'DPS', 'baseDamage'])
         for i in range(0,len(self.posSeg)):
             data.loc[i] = {'distance': self.posSeg[i], 
                            'STK': round(self.getSTK(self.posSeg[i], health = health),2), 
                            'TTK': round(self.getTTK(self.posSeg[i], health = health),2), 
-                           'fireInterval': round(self.fireInterval,2),
-                           'damage': str(self.getDamage(self.posSeg[i])) + " ({damage} * {bulletsPerShot})".format(damage = self.getDamage(self.posSeg[i], ignoreBulletsPerShot=True), bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]), 
-                           'fireRate': round(1/self.fireInterval*60, 0),
-                           'DPS': round(self.getDPS(self.posSeg[i]),2)
+                           'fireInterval': str(round(self.fireInterval,2)) + " (s)",
+                           'damage': str(self.getDamage(self.posSeg[i])) + " ({damage} * {bulletsPerShot})".format(damage = self.getDamage(self.posSeg[i], ignoreBulletsPerShot=True), bulletsPerShot = self.bulletsPerShot), 
+                           'fireRate': str(round(1/self.fireInterval*60, 0)) + " (RPM)",
+                           'DPS': round(self.getDPS(self.posSeg[i]),2),
+                           'baseDamage': str(self.baseDamage * self.bulletsPerShot) + ' (' + str(self.baseDamage) + ' * ' + str(self.bulletsPerShot) + ') '
                         }
         return data

@@ -4,7 +4,7 @@
     <!-- 具体设置请参考README.md -->
     <sheet path="tables/Weapons.xlsx" sheetName="GunsDelta" skipRows="0" separator=","/>
     <fieldNames idField="ID" name='Name' damageDistanceSegmentation="DamageDisSeg" damageSegmentation="DamageSeg" bulletsPerShot="BulletsPerShot" fireRate="FireInterval" baseDamage="BaseDamage"/>
-    <general interpolation="vh" health="100"/>
+    <general interpolation="vh" health="100" sizeX="1000" sizeY="600"/>
     <units fireRate="s" damageSegmentationMode = "multiplier"/>
-    <graphSettings maxDistance="60" xAxis="distance" yAxis="TTK" hoverFields="STK,damage,fireInterval,fireRate,DPS"/>
+    <graphSettings maxDistance="60" xAxis="distance" yAxis="TTK" hoverFields="STK,damage,fireInterval,fireRate,DPS,baseDamage"/>
 </data>
