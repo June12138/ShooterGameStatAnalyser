@@ -26,21 +26,25 @@ jupyter notebook
 ### fieldNames标签中，
 - **idField**为id字段名称；
 - **name**为武器名称的字段名称；
-- **damageDistanceSegmentation**为伤害衰减分隔距离的字段名称；
+- **damageDistanceSegmentation**（选填）为伤害衰减分隔距离的字段名称（不想计算衰减就不用填）；
 - **damageSegmentation**为在不同距离上的实际伤害的字段名称（以后会支持按伤害倍率计算伤害衰减的模式）；
 - **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
 - **fireRate**为每次射击的间隔的字段名称。s为每次射击的秒间隔，ms为每次射击的毫秒间隔，RPM为每分钟射击次数；
-- **baseDamage**为基础伤害的字段名称，可选填。如果伤害衰减是以伤害倍率计算的，则必填。
+- **baseDamage**（选填）为基础伤害的字段名称，可选填。如果伤害衰减是以伤害倍率计算的，则必填。
 ### general标签中：
 - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/；
 - **health**为预设的血量。
+- **sizeX**为图标的宽度
+- **sizeY**为图表高度。
 ### units标签中：
 - **fireRate**为射速的单位，支持s、ms（作为每次射击之间的时间间隔）和RPM（射击次数每分钟）；
 - **damageSegmentationMode**为伤害衰减模式，支持actual（实际伤害）和multiplier（伤害倍率）。
 ### graphSettings标签中：
+#### 所有支持的**数据名称**：
+STK、damage、fireInterval、fireRate、DPS、baseDamage
 - **maxDistance**为图表中显示的最大距离；
-- **xAxis**为x轴上绘制的属性（一般都是距离）；
-- **yAxis**为y轴上绘制的属性（TTK、DPS、STK等）；
-- **hoverFields**为鼠标悬浮窗口的显示的字段（X/Y轴上的数据会自动显示，此外还支持STK、伤害、射击间隔、RPM、DPS）。
+- **xAxis**为x轴上绘制的属性（填写数据名称）；
+- **yAxis**为y轴上绘制的属性（填写数据名称）；
+- **hoverFields**为鼠标悬浮窗口的显示的字段（X/Y轴上的数据会自动显示无需填写，需要显示其它数值就填写数据名称，逗号分隔）。
 
 具体可以看一眼tables/Weapons.xlsx，和settings.xml对照作为参考
