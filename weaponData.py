@@ -23,6 +23,7 @@ class WeaponData:
     def __init__(self, id):
         self.id = id
         self.weaponRecord = gunWeapon.getRowByID(id)
+        #武器名称
         self.name = self.weaponRecord[fieldNames.get("name")].item()
         # 获取每发攻击子弹数量
         self.bulletsPerShot = self.weaponRecord[fieldNames.get("bulletsPerShot")].iloc[0]
@@ -115,3 +116,9 @@ class WeaponData:
                            'baseDamage': str(self.baseDamage * self.bulletsPerShot) + ' (' + str(self.baseDamage) + ' * ' + str(self.bulletsPerShot) + ') '
                         }
         return data
+# 创建一个包含所有武器数据的数组
+weapons = []
+for i in range(0, len(gunWeapon)):
+    weapon = gunWeapon.loc[i]
+    currentData = WeaponData(weapon[gunWeapon.idField])
+    weapons.append(currentData)
