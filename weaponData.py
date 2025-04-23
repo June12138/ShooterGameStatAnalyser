@@ -122,3 +122,7 @@ for i in range(0, len(gunWeapon)):
     weapon = gunWeapon.loc[i]
     currentData = WeaponData(weapon[gunWeapon.idField])
     weapons.append(currentData)
+def getWeaponByName(name):
+    for i in weapons:
+        if i.name == name:
+            return i
