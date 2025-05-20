@@ -13,7 +13,7 @@ fieldNames = settings.find("fieldNames")
 # 加载单位相关设置
 unitSettings = settings.find("units")
 # 加载武器表单
-gunWeapon = MyTable(sheetSettings.get("path"), sheetSettings.get("sheetName"), idField=fieldNames.get('idField'), skipRows=skipRows)
+gunWeapon = ExTable(sheetSettings.get("path"), sheetSettings.get("sheetName"), idField=fieldNames.get('idField'), skipRows=skipRows)
 # 加载绘制设置
 graphSettings = settings.find("graphSettings")
 
