@@ -1,6 +1,7 @@
 import pandas as pd
 
 class MyDF(pd.DataFrame):
+    idField = "ID"
     def getRowByID(self, id):
         return self[self[self.idField] == id]
     def QuickSearch(self, searchField, searchKey, returnKey):

@@ -34,7 +34,7 @@ jupyter notebook
 ### general标签中：
 - **interpolation**为程序所绘制出的表格的插值模式，默认vh，不同的插值方式包括: hv, vh, hvh, vhv, spline, linear, 详见官方文档的Interpolation部分详解 https://plotly.com/python/line-charts/；
 - **health**为预设的血量。
-- **sizeX**为图标的宽度
+- **sizeX**为图表的宽度
 - **sizeY**为图表高度。
 ### units标签中：
 - **fireRate**为射速的单位，支持s、ms（作为每次射击之间的时间间隔）和RPM（射击次数每分钟）；

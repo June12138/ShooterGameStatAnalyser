@@ -20,6 +20,3 @@ def hashColor(seed):
     
     # Return the color as an RGB string
     return f"rgb({r},{g},{b})"
-print(hashColor("M4"))
-print(hashColor("134"))
-print(hashColor("hello world"))
