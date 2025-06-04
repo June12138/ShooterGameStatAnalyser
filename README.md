@@ -5,6 +5,7 @@ FPSDataAnalyser是一个用于分析FPS游戏数据的小工具，可以解析.x
 
 鼠标悬浮在图表上可以查看具体数值，STK、伤害、射速、DPS那些的，方便比较。
 ![alt text](screenshot.png)
+[使用方法](#使用方法)
 ## 使用方法
 1. 下载到本地
 2. CD到项目目录
@@ -16,7 +17,7 @@ jupyter notebook
 4. 在新弹出的浏览器窗口中运行main.ipynb。第二次运行的时候直接运行jupyter notebook即可。
 
 ## 设置说明
-- 所有设置都在settings.xml中
+- 所有设置都在[settings.xml](settings.xml)中
 ### sheet标签sheet标签中：
 - **path**为.xlsx文件路径；
 - **sheetName**为工作表名称；
