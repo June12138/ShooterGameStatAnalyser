@@ -41,9 +41,9 @@ class WeaponData:
         # 获取伤害分段
         self.damageSeg = []
         temp1 = str(self.weaponRecord[fieldNames.get("damageSegmentation")].item()).split(sheetSettings.get('separator'))
-        self.damageSeg.append(float(temp1[0]))
         for i in temp1:
             if (i != 'nan'): self.damageSeg.append(float(i))
+        self.damageSeg.append(float(temp1[len(temp1) - 1]))
         # 获取伤害距离分段
         temp2 = []
         # 为了让damageDistanceSegmentation成为可以选填，做个保护
@@ -78,7 +78,7 @@ class WeaponData:
         damage = 0
         for i in range(0, len(self.posSeg)):
             # 如果距离小于等于当前距离段，则返回对应的伤害值
-            if distance <= int(self.posSeg[i]):
+            if distance <= float(self.posSeg[i]):
                 # 如果伤害衰减是按实际伤害记录，则直接返回伤害值乘以子弹数量
                 if (unitSettings.get("damageSegmentationMode") == "actual"):
                     damage = float(self.damageSeg[i]) * bulletsPerShot
