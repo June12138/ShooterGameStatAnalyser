@@ -28,7 +28,7 @@ jupyter notebook
 - **idField**为id字段名称；
 - **name**为武器名称的字段名称；
 - **damageDistanceSegmentation**（选填）为伤害衰减分隔距离的字段名称（不想计算衰减就不用填）；
-- **damageSegmentation**为在不同距离上的实际伤害的字段名称（以后会支持按伤害倍率计算伤害衰减的模式）；
+- **damageSegmentation**为在不同距离上的实际伤害的字段名称acutual为实际伤害，multiplier为**baseDamage**的倍数；
 - **bulletsPershot**为每次攻击时发射的子弹数量的字段名称；
 - **fireRate**为每次射击的间隔的字段名称。s为每次射击的秒间隔，ms为每次射击的毫秒间隔，RPM为每分钟射击次数；
 - **baseDamage**（选填）为基础伤害的字段名称，可选填。如果伤害衰减是以伤害倍率计算的，则必填。
