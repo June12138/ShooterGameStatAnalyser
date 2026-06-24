@@ -1,5 +1,6 @@
 pandas==2.2.3
 plotly==6.1.1
-jupyter
 openpyxl
 dash
+dash-bootstrap-components
+pywebview  # Optional: install for native desktop window; without it use: python app.py --browser

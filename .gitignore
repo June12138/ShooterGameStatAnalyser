@@ -175,3 +175,8 @@ cython_debug/
 
 # excel temp files
 ~$*.xlsx
+
+# IDE files
+.idea/*
+.vscode/*
+*.code-workspace
