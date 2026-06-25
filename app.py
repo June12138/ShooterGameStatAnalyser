@@ -67,8 +67,6 @@ app.layout = dbc.Container(
                 ),
             ),
         ),
-        # Hidden div to store the dropdown value when it hasn't changed
-        html.Div(id="hiddenDropdownValue", style={"display": "none"}),
     ],
     fluid=True,
 )
@@ -97,12 +95,31 @@ def on_interact(toggle_n, dropdown_val, showall_n, clearall_n, reload_n, current
 
     # --- Reload Data ---
     if triggered_id == "reloadData":
+        # 1. Snapshot current trace visibility from the old figure
+        old_vis = {}
+        if current_fig and 'data' in current_fig:
+            for trace in current_fig['data']:
+                name = trace.get('name', '')
+                if name:
+                    weapon_name = name.split(" (ID:")[0]
+                    old_vis[weapon_name] = trace.get('visible', True)
+
+        # 2. Reload data from disk
         wd.reload_data()
+
+        # 3. Build fresh figure (base: all hidden)
+        new_fig = wd.getMasterFigure(hide=True)
+
+        # 4. Restore previous visibility for weapons that still exist
+        for trace in new_fig.data:
+            weapon_name = trace.name.split(" (ID:")[0]
+            if weapon_name in old_vis:
+                trace.visible = old_vis[weapon_name]
+
         new_options = [{"label": w.name, "value": w.name} for w in wd.weapons]
-        # If the previously selected weapon still exists, keep it; otherwise reset
-        new_val = dropdown_val if any(w.name == dropdown_val for w in wd.weapons) else None
+        new_val = dropdown_val if dropdown_val and any(w.name == dropdown_val for w in wd.weapons) else None
         status_msg = "Data reloaded"
-        return wd.getMasterFigure(hide=True), new_options, new_val, status_msg
+        return new_fig, new_options, new_val, status_msg
 
     # --- Build figure from current state ---
     updated_figure = go.Figure(current_fig)
